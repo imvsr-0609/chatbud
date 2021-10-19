@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import SearchIcon from '@material-ui/icons/Search';
 import SingleChatList from './SingleChatList';
 import { device } from '../../theme/responsive';
-
 import { db } from '../../firebase';
 import { useCollection } from 'react-firebase-hooks/firestore';
 
@@ -60,10 +59,11 @@ export const SearchInput = styled.input`
 
 const ChatListBody = styled.div`
 	display: flex;
+	height: 100%;
+	overflow-y: scroll;
 	flex-direction: column;
 	background: ${({ theme }) => theme.lists_bg};
 	padding: 15px;
-	height: 90vh;
 	overflow-y: scroll;
 	&::-webkit-scrollbar {
 		display: none;
@@ -82,7 +82,7 @@ const ChatList = () => {
 
 	return (
 		<ChatListWrapper>
-			<SearchForm>
+			{/* <SearchForm>
 				<SearchButton>
 					<SearchIcon />
 				</SearchButton>
@@ -92,7 +92,7 @@ const ChatList = () => {
 					type="text"
 					placeholder="Search in your inbox"
 				/>
-			</SearchForm>
+			</SearchForm> */}
 
 			<ChatListBody>
 				{groups?.docs.map((group) => (

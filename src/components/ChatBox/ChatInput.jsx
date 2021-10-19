@@ -93,6 +93,9 @@ const ChatInput = ({ roomId, user }) => {
 
 	const sendMessage = (e) => {
 		e.preventDefault();
+		if (message.length === 0) {
+			return;
+		}
 
 		// console.log(message);
 

@@ -2,11 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import Avatar from '@material-ui/core/Avatar';
 import AddPhotoAlternateOutlinedIcon from '@material-ui/icons/AddPhotoAlternateOutlined';
-import { LoginButton } from '../../pages/LoginPage/LoginPage';
-import { SearchInput } from '../ChatList/ChatList';
-import { ThemeButton } from './UserTab';
 import { db, storage } from '../../firebase';
-import useStorage from '../../hooks/useStorage';
+import { LoginButton } from '../../pages/LoginPage/LoginPage';
 
 const GroupModal = styled.div`
 	position: fixed;
@@ -60,7 +57,15 @@ const GroupButton = styled(LoginButton)`
 	}
 `;
 
-const Input = styled(SearchInput)`
+const Input = styled.input`
+	background-color: transparent;
+	border: none;
+	outline: none;
+	color: inherit;
+	font-weight: bold;
+	&::placeholder {
+		color: ${({ theme }) => theme.secondary_font};
+	}
 	text-align: center;
 	margin: 15px 0;
 	padding: 10px 0;
@@ -81,13 +86,13 @@ const Description = styled.textarea`
 	}
 `;
 
-const EditGroup = ({ close }) => {
-	const [name, setName] = useState('');
-	const [description, setDescription] = useState('');
+const EditGroup = ({ name, id, image, description, close }) => {
+	const [newName, setName] = useState(name);
+	const [newDescription, setDescription] = useState(description);
 	const [file, setFile] = useState(null);
-	const [url, setUrl] = useState('');
-	const [preview, setPreview] = useState(null);
-	const [progress, setProgress] = useState(0);
+	const [url, setUrl] = useState(image);
+	const [preview, setPreview] = useState(image);
+	const [progress, setProgress] = useState(100);
 	const [error, setError] = useState('');
 	const modalRef = useRef(null);
 
@@ -104,6 +109,7 @@ const EditGroup = ({ close }) => {
 	}, [modalRef]);
 
 	const handleChange = (e) => {
+		setProgress(0);
 		let selected = e.target.files[0];
 
 		if (selected) {
@@ -134,18 +140,18 @@ const EditGroup = ({ close }) => {
 		}
 	};
 
-	const createGroup = (e) => {
+	const editGroup = async (e) => {
 		e.preventDefault();
 
-		const newGroup = {
-			name,
-			description,
+		const updatedGroup = {
+			name: newName,
+			description: newDescription,
 			image: url,
+			id,
 		};
 
-		if (newGroup) {
-			db.collection('rooms').add(newGroup);
-		}
+		await db.collection('rooms').doc(id).update(updatedGroup);
+
 		close();
 	};
 
@@ -167,12 +173,12 @@ const EditGroup = ({ close }) => {
 				</ImageUpload>
 
 				<Input
-					value={name}
+					value={newName}
 					onChange={(e) => setName(e.target.value)}
 					placeholder="Enter group name..."
 				/>
 				<Description
-					value={description}
+					value={newDescription}
 					onChange={(e) => setDescription(e.target.value)}
 					placeholder="Enter group desc..."
 				/>
@@ -180,9 +186,9 @@ const EditGroup = ({ close }) => {
 				<GroupButton
 					type="submit"
 					disabled={progress < 100}
-					onClick={createGroup}
+					onClick={editGroup}
 				>
-					Create Group
+					Update
 				</GroupButton>
 			</NewGroupForm>
 		</GroupModal>

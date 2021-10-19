@@ -49,7 +49,7 @@ const Hamburger = styled.button`
 `;
 
 const ChatRoom = ({ user }) => {
-	const [open, setOpen] = useState(false);
+	const [open, setOpen] = useState(true);
 	const roomId = useSelector(selelctRoomId);
 
 	const navRef = useRef(null);

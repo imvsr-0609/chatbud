@@ -6,6 +6,7 @@ import { device } from '../../theme/responsive';
 import ChatBody from './ChatBody';
 import { useCollection, useDocument } from 'react-firebase-hooks/firestore';
 import { db } from '../../firebase';
+import DefaultChat from './DefaultChat';
 
 const ChatWrapper = styled.div`
 	flex: 1;
@@ -49,7 +50,7 @@ const ChatBox = ({ roomId, user }) => {
 					<ChatInput user={user} roomId={roomId} />
 				</>
 			) : (
-				<></>
+				<DefaultChat />
 			)}
 		</ChatWrapper>
 	);

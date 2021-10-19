@@ -70,11 +70,11 @@ const ChatHeader = ({ room, user }) => {
 					<span></span>
 				</UserStatus>
 			</Profile>
-			<Tooltip title="Attach File" TransitionComponent={Zoom}>
+			{/* <Tooltip title="Attach File" TransitionComponent={Zoom}>
 				<AddFile>
 					<AttachFileIcon />
 				</AddFile>
-			</Tooltip>
+			</Tooltip> */}
 		</Header>
 	);
 };

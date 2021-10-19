@@ -131,7 +131,7 @@ const NewGroup = ({ close }) => {
 		}
 	};
 
-	const createGroup = (e) => {
+	const createGroup = async (e) => {
 		e.preventDefault();
 
 		const newGroup = {
@@ -141,7 +141,7 @@ const NewGroup = ({ close }) => {
 		};
 
 		if (newGroup) {
-			db.collection('rooms').add(newGroup);
+			await db.collection('rooms').add(newGroup);
 		}
 		close();
 	};
