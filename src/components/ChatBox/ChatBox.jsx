@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import ChatHeader from './ChatHeader';
 import ChatInput from './ChatInput';
@@ -25,10 +25,11 @@ const ChatWrapper = styled.div`
 `;
 
 const ChatBox = ({ roomId, user }) => {
+	const chatRef = useRef();
 	const [roomDetails] = useDocument(
 		roomId && db.collection('rooms').doc(roomId),
 	);
-	const [roomMessages] = useCollection(
+	const [roomMessages, loading] = useCollection(
 		roomId &&
 			db
 				.collection('rooms')
@@ -46,8 +47,14 @@ const ChatBox = ({ roomId, user }) => {
 			{roomId ? (
 				<>
 					<ChatHeader user={user} roomId={roomId} room={roomDetails?.data()} />
-					<ChatBody user={user} roomId={roomId} messages={roomMessages?.docs} />
-					<ChatInput user={user} roomId={roomId} />
+					<ChatBody
+						loading={loading}
+						chatRef={chatRef}
+						user={user}
+						roomId={roomId}
+						messages={roomMessages?.docs}
+					/>
+					<ChatInput chatRef={chatRef} user={user} roomId={roomId} />
 				</>
 			) : (
 				<DefaultChat />

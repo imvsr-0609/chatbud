@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import SingleChat from './SingleChat';
 
@@ -16,8 +16,17 @@ const ChatBodyWrapper = styled.div`
 `;
 
 const ChatBody = ({ messages, user }) => {
+	const chatRef = useRef(null);
+	useEffect(() => {
+		// window.scrollTo(0, 0);
+		chatRef.current.scrollIntoView({
+			behavior: 'smooth',
+			block: 'start',
+		});
+	}, [messages]);
+
 	return (
-		<ChatBodyWrapper>
+		<ChatBodyWrapper ref={chatRef}>
 			{messages?.map((msg) => (
 				<SingleChat
 					key={msg?.id}
